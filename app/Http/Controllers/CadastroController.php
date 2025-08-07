@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use app\Models\User;
+use App\Models\User;
 
 class CadastroController extends Controller
 {
@@ -10,8 +10,9 @@ class CadastroController extends Controller
 
     public function index()
     {
-        $this->user = new User();
-        return view('usuario.index',compact('user'));
+        $usuario = new User();
+        $usuario = User::all();
+        return view('index',compact('usuario'));
     }
 
     /**
@@ -27,15 +28,15 @@ class CadastroController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        
         User::create([
             'name' => $request->input('nome'),
             'email' =>$request->input('email'),
-            'password' =>$request->input('password')
+            'password' =>$request->input('senha')
         ]);
-        
-        dd($request->all());
-
-        return redirect()->route('users.index')->with('success', 'User registered successfully.');
+        session()->flash('mensagem', 'Usuário cadastrado com sucesso!');
+        return redirect()->route('login');
     }
 
     /**
