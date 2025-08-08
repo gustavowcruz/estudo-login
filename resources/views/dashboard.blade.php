@@ -10,7 +10,7 @@
     <title>Teste</title>
 </head>
 <body>
-    <div class="max-w-[1200px] mx-auto p-4 bg-gray-100 min-h-screen">
+    <div class="max-w-[100%] mx-auto p-4 bg-gray-100 min-h-screen">
         @if(Auth::user() !== null)
             <ul>
                 <li>Bem vindo(a) <span class='bg-green-300 rounded-sm px-1'> {{ auth()->user()->name }}</span></li>
