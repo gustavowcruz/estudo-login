@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    // aqui exibe a tela de login
     public function login()
     {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
         return view('login');
     }
 
+    //o login de fato é efetuado aqui
     public function autenticar(Request $request){      
         
         validator(request()->all(), [ // que eu saiba isso aqui tem que ser passado no request personalizado
@@ -20,7 +26,8 @@ class AuthController extends Controller
             'password' => ['required'],
         ])->validate();
 
-        if (Auth::attempt($request->only(['email', 'password']))) {
+        $remember = $request->filled('remember');
+        if (Auth::attempt($request->only(['email', 'password']), $remember)) {
             $request->session()->regenerate();
             return redirect()->intended('dashboard');
         }
