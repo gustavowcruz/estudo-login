@@ -13,7 +13,7 @@
 
 </head>
 <body class="min-h-screen">
-    <header> Oi sou um cabeçalho</header>
+    <header class='dark:text-white text-center fixed w-full top-0'> Oi sou um cabeçalho</header>
     @yield('content')
 </body>
 </html>
