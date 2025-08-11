@@ -16,7 +16,7 @@ Route::post('/store', [CadastroController::class, 'store'])->name('usuario.store
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('login.autenticar');
 
-Route::get('/dashboard', [PerfilController::class, 'index'])->name('dashboard')->middleware('auth');
-
 //logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/dashboard', [PerfilController::class, 'index'])->name('dashboard')->middleware('auth');
