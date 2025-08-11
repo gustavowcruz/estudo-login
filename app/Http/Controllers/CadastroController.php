@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\CadastroRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -23,7 +24,7 @@ class CadastroController extends Controller
         return view('registrar_user');
     }
 
-    public function store(Request $request)
+    public function store(CadastroRequest $request)
     {        
         User::create([
             'name' => $request->input('nome'),
@@ -31,6 +32,6 @@ class CadastroController extends Controller
             'password' =>$request->input('senha')
         ]);
         session()->flash('mensagem', 'Usuário cadastrado com sucesso!');
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
     }
 }
