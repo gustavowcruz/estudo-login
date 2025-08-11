@@ -11,6 +11,10 @@
                     @endforeach
                 </ul>
             </div>
+        @elseif(session('success'))
+            <div class="bg-green-500 text-white p-2 rounded mb-4">
+                {{ session('success') }}
+            </div>
         @endif
         <form action="{{ route('login.autenticar') }}" method="POST" class="">
             @csrf
@@ -24,9 +28,12 @@
                 </div>
                 <div class='inline-flex flex-col gap-2 items-start'>
                     <label class='dark:text-white'>Senha</label>
-                    <input type="password" placeholder="Insira a senha aqui" name="password" class="p-2 rounded dark:bg-gray-800 dark:text-white">
+                    <div class="relative">
+                        <input type="password" placeholder="Insira a senha aqui" name="password" class="p-2 rounded dark:bg-gray-800 dark:text-white">
+                        {{-- <span class='text-white absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer'>Exibir Senha</span> --}}
+                    </div>
                 </div>
-                
+
                 <div class='inline-flex items-center gap-2'>
                     <input type="checkbox" name="remember" class="rounded dark:bg-gray-800 dark:text-white">
                     <label class='dark:text-white'>Lembrar-me</label>
