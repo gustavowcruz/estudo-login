@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,25 @@ return [
 
     'mailers' => [
 
+        'mailgun' => [
+            'transport' => 'mailgun',
+            'client' => [
+                'timeout' => 5,
+            ],
+            'domain' => env('MAILGUN_DOMAIN'),
+            'secret' => env('MAILGUN_SECRET'),
+            'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+            'scheme' => 'https',
+        ],
+
+        'postmark' => [
+            'token' => env('POSTMARK_API_TOKEN'),
+            'transport' => 'postmark',
+            'client' => [
+                'timeout' => 5,
+            ],
+            'message_stream_id' => env('POSTMARK_MESSAGE_STREAM_ID'),
+        ],
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
