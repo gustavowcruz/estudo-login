@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{CadastroController, AuthController, PerfilController};
+use App\Http\Controllers\{CadastroController, AuthController, PerfilController, ContatoController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,3 +20,8 @@ Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('login.a
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [PerfilController::class, 'index'])->name('dashboard')->middleware('auth');
+
+//email
+
+Route::get('/contato', [ContatoController::class, 'index'])->name('mail.contato');
+Route::post('/contato', [ContatoController::class, 'store'])->name('mail.contato.store');
