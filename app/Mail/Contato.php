@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 
 class Contato extends Mailable
@@ -16,7 +17,7 @@ class Contato extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public readonly array $data)
     {
         //
     }
@@ -27,6 +28,7 @@ class Contato extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from:new Address($this->data['fromEmail'], $this->data['fromName']),
             subject: 'Contato',
         );
     }
@@ -37,7 +39,7 @@ class Contato extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.contato',
+            view: 'mail.contact',
         );
     }
 

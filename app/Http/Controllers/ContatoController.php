@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Contato;
+use App\Mail\EmailVerification;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ContatoController extends Controller
 {
@@ -29,7 +32,17 @@ class ContatoController extends Controller
      */
     public function store(Request $request)
     {
-        Mail::to('gwgustavowagner@hotmail.com')->send(new Contato);
+        $user = Auth::user();
+        $envio = Mail::to($user->email)->send(new Contato([
+            'fromName' => $request->input('nome'),
+            'fromEmail' => $request->input('email'),
+            'message' => $request->input('mensagem'),
+        ]));
+
+        Mail::to($user->email)->send(new EmailVerification($user));
+
+        var_dump(['email enviado', $envio]);
+        // return redirect()->route('mail.contato')->with('success', 'Email enviado com sucesso!');
     }
 
     /**
