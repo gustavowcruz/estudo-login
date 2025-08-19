@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{CadastroController, AuthController, PerfilController, ContatoController};
+use App\Http\Controllers\{CadastroController, AuthController, PerfilController, AlbumController, ContatoController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,12 +16,23 @@ Route::post('/store', [CadastroController::class, 'store'])->name('usuario.store
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('login.autenticar');
 
-//logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::group(['middleware' => ['auth']], function() {
+    //logout
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [PerfilController::class, 'index'])->name('dashboard')->middleware('auth');
+    Route::get('/dashboard', [PerfilController::class, 'index'])->name('dashboard');
+
+    //album
+    Route::get('albuns/create', [AlbumController::class, 'create'])->name('albuns.create');
+    Route::post('albuns', [AlbumController::class, 'store'])->name('albuns.store');
+    Route::get('albuns/{album}', [AlbumController::class, 'show'])->name('albuns.show');
+    Route::get('albuns/{album}/edit', [AlbumController::class, 'edit'])->name('albuns.edit');
+    Route::put('albuns/{album}', [AlbumController::class, 'update'])->name('albuns.update');
+    Route::delete('albuns/{album}', [AlbumController::class, 'destroy'])->name('albuns.destroy');
+});
 
 //email
 
 Route::get('/contato', [ContatoController::class, 'index'])->name('mail.contato');
 Route::post('/contato', [ContatoController::class, 'store'])->name('mail.contato.store');
+
