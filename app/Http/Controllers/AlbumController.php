@@ -5,14 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Album;
 
-class SongControllers extends Controller
+class AlbumController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $album;
+
+    public function __construct(Album $album)
+    {
+        $this->album = $album;
+    }
+
     public function index()
     {
-        // return view('dashboard');
+        $albuns = Album::all();
+        return view('dashboard', compact('albuns'));
     }
 
     /**
@@ -28,7 +36,7 @@ class SongControllers extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**
