@@ -54,3 +54,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Link de verificação enviado!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+//usuario
+
+Route::get('/usuario/{id}/editar', [PerfilController::class, 'edit'])->name('usuario.edit');
+Route::put('/usuario/{id}', [PerfilController::class, 'update'])->name('usuario.update');
