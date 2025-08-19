@@ -24,7 +24,7 @@
             <div class="w-100% flex flex-col gap-4 items-center">
                 <div class='inline-flex flex-col gap-2 items-start'>
                     <label class='dark:text-white'>Email</label>
-                    <input type="text" placeholder="Insira o email" name="email" class="p-2 rounded dark:bg-gray-800 dark:text-white">
+                    <input type="text" value="{{ old('email') }}" placeholder="Insira o email" name="email" class="p-2 rounded dark:bg-gray-800 dark:text-white">
                 </div>
                 <div class='inline-flex flex-col gap-2 items-start'>
                     <label class='dark:text-white'>Senha</label>
