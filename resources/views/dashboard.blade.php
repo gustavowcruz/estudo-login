@@ -14,18 +14,22 @@
         <h1 class="text-2xl font-bold">Sou um cabeçalho</h1>
     </header>
     <div class="max-w-[100%] mx-auto p-4 bg-gray-100 min-h-screen pt-16">
-        @if(Auth::user() !== null)
-            <ul>
-                <li>Bem vindo(a) <span class='bg-green-300 rounded-sm px-1'> {{ auth()->user()->name }}</span></li>
-            </ul>
-        @else
-            <h1>Usuário não autenticado</h1>
-        @endif
+        <div class="mb-4">
 
-        <a href="{{route('albuns.create')}}" class="add-btn bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mt-10  rounded-[50%]">Add</a>
+            @if(Auth::user() !== null)
+                <ul>
+                    <li>Bem vindo(a) <span class='bg-green-300 rounded-sm px-1'> {{ auth()->user()->name }}</span></li>
+                </ul>
+            @else
+                <h1>Usuário não autenticado</h1>
+            @endif
 
+        </div>
+        <a href="{{route('albuns.create')}}" class="add-btn bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mt-10  rounded-[50%] hidden">Add</a>
+
+        <a href="{{route('usuario.edit', auth()->user()->id)}}" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mt-10">Alterar Dados</a>
         <div class='add-item-container'>
-            
+
         </div>
 
         <a class='cursor-pointer' href="{{ route('logout') }}">
