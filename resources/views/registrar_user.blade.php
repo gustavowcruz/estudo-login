@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('usuario.store') }}" method="POST" class="w-full max-w-sm mx-auto">
+    <form action="{{ route('usuario.store') }}" autocomplete="off" method="POST" class="w-full max-w-sm mx-auto">
         @csrf
         @method('POST')
         <h1 class='titulo text-2xl font-bold text-center mb-10'>Tela de cadastro minimalista</h1>
@@ -36,6 +36,4 @@
         <div class='items-center text-center'><button class="bg-blue-500 text-white py-2 px-4 rounded cursor-pointer shadow-xl mt-4" type="submit">Cadastrar</button></div>
     </form>
 </div>
-</body>
-</html>
 @endsection
