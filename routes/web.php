@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\{CadastroController, AuthController, PerfilController, AlbumController, ContatoController};
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::get('/index', [CadastroController::class, 'index'])->name('usuario.index');
 Route::get('/cadastro', [CadastroController::class, 'create'])->name('usuario.create');
@@ -35,4 +38,19 @@ Route::group(['middleware' => ['auth']], function() {
 
 Route::get('/contato', [ContatoController::class, 'index'])->name('mail.contato');
 Route::post('/contato', [ContatoController::class, 'store'])->name('mail.contato.store');
+
+// Rotas de verificação de email
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard')->with('success', 'Email verificado com sucesso!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Link de verificação enviado!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
