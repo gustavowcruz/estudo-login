@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('artista');
             $table->string('genero')->nullable();
-            $table->duracao('duracao')->nullable();
+            $table->string('duracao')->nullable();
             $table->timestamps();
         });
     }
