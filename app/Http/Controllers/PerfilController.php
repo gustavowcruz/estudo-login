@@ -27,16 +27,22 @@ class PerfilController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'senha' => 'nullable|string|min:8|confirmed',
+            // 'senha' => 'nullable|string|min:8|confirmed',
         ]);
 
-        $usuario->name = $request->input('nome');
-        $usuario->email = $request->input('email');
-
-        if ($request->filled('senha')) {
-            $usuario->password = bcrypt($request->input('senha'));
+        try {
+            $usuario->update([
+                'name' => $request->input('nome'),
+                'email' => $request->input('email'),
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao atualizar perfil']);
         }
 
-        return redirect()->route('perfil.index')->with('success', 'Perfil atualizado com sucesso!');
+        // if ($request->filled('senha')) {
+        //     $usuario->password = bcrypt($request->input('senha'));
+        // }
+
+        return redirect()->route('dashboard')->with('success', 'Perfil atualizado com sucesso!');
     }
 }
