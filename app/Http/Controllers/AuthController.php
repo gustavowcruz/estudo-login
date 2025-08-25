@@ -19,17 +19,27 @@ class AuthController extends Controller
     }
 
     //o login de fato é efetuado aqui
-    public function autenticar(Request $request){      
-        
-        validator(request()->all(), [ // que eu saiba isso aqui tem que ser passado no request personalizado
+    public function autenticar(Request $request){
+
+        $credenciais = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-        ])->validate();
+        ]);
 
         $remember = $request->filled('remember');
-        if (Auth::attempt($request->only(['email', 'password']), $remember)) {
+
+        if (Auth::attempt($credenciais, $remember)) {
+            $user = Auth::user();
+
+            // Verifica se o email está verificado usando o campo email_verified_at
+
+            if (!$user->hasVerifiedEmail()) {
+            // Auth::logout();
+            return redirect()->route('verification.notice');
+        }
+
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
@@ -45,4 +55,16 @@ class AuthController extends Controller
 
         return redirect('/login');
     }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        // Lógica para enviar o link de redefinição de senha
+
+        return back()->with('message', 'Link de redefinição de senha enviado!');
+    }
+
 }

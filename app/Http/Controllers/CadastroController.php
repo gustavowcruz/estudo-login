@@ -25,12 +25,15 @@ class CadastroController extends Controller
     }
 
     public function store(CadastroRequest $request)
-    {        
-        User::create([
+    {
+        $user = User::create([
             'name' => $request->input('nome'),
             'email' =>$request->input('email'),
             'password' =>$request->input('senha')
         ]);
+
+        $user->sendEmailVerificationNotification();
+        
         session()->flash('mensagem', 'Usuário cadastrado com sucesso!');
         return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
     }
