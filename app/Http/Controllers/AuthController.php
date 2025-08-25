@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
 
 class AuthController extends Controller
 {
@@ -62,9 +65,34 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // Lógica para enviar o link de redefinição de senha
+        $status = Password::sendResetLink($request->only('email'));
 
-        return back()->with('message', 'Link de redefinição de senha enviado!');
+        return $status == Password::RESET_LINK_SENT
+    ? back()->with(['status' => __($status)])
+    : back()->withErrors(['email' => __($status)]);
     }
 
+    public function resetPassword(Request $request) {
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token')
+            , function ($user, $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            });
+
+            return $status === Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
+    }
 }

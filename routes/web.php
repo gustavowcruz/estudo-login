@@ -3,6 +3,7 @@
 use App\Http\Controllers\{CadastroController, AuthController, PerfilController, AlbumController, ContatoController};
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -59,7 +60,23 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Link de verificação enviado!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+
 //usuario
 
 Route::get('/usuario/{id}/editar', [PerfilController::class, 'edit'])->name('usuario.edit');
 Route::put('/usuario/{id}', [PerfilController::class, 'update'])->name('usuario.update');
+
+//forgot password
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/forgot-password',[AuthController::class, 'forgotPassword'])
+->middleware('guest')->name('password.email');
+
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+->middleware('guest')->name('password.update');
