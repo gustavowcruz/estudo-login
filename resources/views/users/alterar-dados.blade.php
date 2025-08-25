@@ -8,6 +8,16 @@
     <title>Document</title>
 </head>
 <body>
+    @if ($errors->any())
+        <div class="bg-red-500 text-white p-2 rounded mb-4">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+    @endif
     <div class="container">
         <h1>Alterar Dados</h1>
         <form action="{{ route('usuario.update', $usuario->id) }}" method="POST">
@@ -15,7 +25,7 @@
             @method('PUT')
             <div class="mb-3">
                 <label for="name" class="form-label">Nome</label>
-                <input type="text" class="border" id="name" name="name" value="{{ $usuario->name }}" required>
+                <input type="text" class="border" id="name" name="nome" value="{{ $usuario->name }}" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
