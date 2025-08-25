@@ -33,6 +33,8 @@
                         {{-- <span class='text-white absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer'>Exibir Senha</span> --}}
                     </div>
                 </div>
+                <a class='dark:text-white underline hover:text-yellow-300 focus:outline-none' href="{{ route('password.request') }}"><p>Esqueceu a senha?</p></a>
+                {{-- lembrar-me --}}
 
                 <div class='inline-flex items-center gap-2'>
                     <input type="checkbox" name="remember" class="rounded dark:bg-gray-800 dark:text-white">
