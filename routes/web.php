@@ -39,18 +39,23 @@ Route::group(['middleware' => ['auth']], function() {
 Route::get('/contato', [ContatoController::class, 'index'])->name('mail.contato');
 Route::post('/contato', [ContatoController::class, 'store'])->name('mail.contato.store');
 
-// Rotas de verificação de email
+//email
+
+// Rota para exibir a página de verificação de email
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+    return view('mail.email_nao_verificado');
 })->middleware('auth')->name('verification.notice');
 
+// Verificação do email
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect('/dashboard')->with('success', 'Email verificado com sucesso!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
+// Reenvio do email de verificação
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
+
     return back()->with('message', 'Link de verificação enviado!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
