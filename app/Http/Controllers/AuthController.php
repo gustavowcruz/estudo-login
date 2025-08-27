@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
+use PhpParser\Node\Expr\Cast\String_;
 
 class AuthController extends Controller
 {
@@ -72,16 +73,20 @@ class AuthController extends Controller
     : back()->withErrors(['email' => __($status)]);
     }
 
+    public function redefinirSenha(String $token){
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
     public function resetPassword(Request $request) {
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)],
         ]);
 
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token')
-            , function ($user, $password) {
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
                 $user->forceFill([
                     'password' => bcrypt($password)
                 ])->setRememberToken(Str::random(60));
@@ -89,10 +94,12 @@ class AuthController extends Controller
                 $user->save();
 
                 event(new PasswordReset($user));
-            });
+            }
+        );
 
-            return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('status', __($status))
-        : back()->withErrors(['email' => [__($status)]]);
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
+
 }
