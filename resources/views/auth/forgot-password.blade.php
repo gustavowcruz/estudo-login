@@ -8,6 +8,11 @@
 </head>
 <body>
     <div>
+        @if (session('status'))
+            <div>
+                {{ session('status') }}
+            </div>
+        @endif
         <h1>Esqueceu a senha</h1>
         <form action="{{ route('password.email') }}" method="POST">
             @csrf
