@@ -27,13 +27,14 @@ class PerfilController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            // 'senha' => 'nullable|string|min:8|confirmed',
+            'senha' => 'nullable|string|min:8|confirmed',
         ]);
 
         try {
             $usuario->update([
                 'name' => $request->input('nome'),
                 'email' => $request->input('email'),
+                'password' => $request->filled('senha') ? bcrypt($request->input('senha')) : $usuario->password,
             ]);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Erro ao atualizar perfil']);

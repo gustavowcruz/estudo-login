@@ -22,7 +22,6 @@ class AuthController extends Controller
         return view('login');
     }
 
-    //o login de fato é efetuado aqui
     public function autenticar(Request $request){
 
         $credenciais = $request->validate([
@@ -34,8 +33,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($credenciais, $remember)) {
             $user = Auth::user();
-
-            // Verifica se o email está verificado usando o campo email_verified_at
 
             if (!$user->hasVerifiedEmail()) {
             return redirect()->route('verification.notice');
