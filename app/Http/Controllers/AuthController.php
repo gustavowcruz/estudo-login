@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Password; // ✅ Para reset de senha
+use Illuminate\Validation\Rules\Password as PasswordRule; // ✅ Para validação
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
-use PhpParser\Node\Expr\Cast\String_;
 
 class AuthController extends Controller
 {
@@ -38,7 +38,6 @@ class AuthController extends Controller
             // Verifica se o email está verificado usando o campo email_verified_at
 
             if (!$user->hasVerifiedEmail()) {
-            // Auth::logout();
             return redirect()->route('verification.notice');
         }
 
@@ -74,18 +73,19 @@ class AuthController extends Controller
     }
 
     public function redefinirSenha(String $token){
-        return view('auth.reset-password', ['token' => $token]);
+        return view('auth.reset-password',
+              ['token' => $token, 'email' => request()->email]);
     }
 
     public function resetPassword(Request $request) {
         $request->validate([
             'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::min(8)],
+            'email' => ['required', 'email'], // ✅ Adicione esta linha
+            'password' => ['required', 'confirmed', PasswordRule::min(8)],
         ]);
 
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only('email', 'password', 'password_confirmation', 'token'), // ✅ Inclua 'email'
             function ($user, $password) {
                 $user->forceFill([
                     'password' => bcrypt($password)
@@ -101,5 +101,4 @@ class AuthController extends Controller
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }
-
 }

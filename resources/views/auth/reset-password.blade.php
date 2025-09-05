@@ -8,13 +8,28 @@
     @vite('resources/css/app.css')
 </head>
 <body>
+
+    <div class="container mx-auto mt-4">
+        @if ($errors->any())
+            <div class="bg-red-500 text-white p-2 rounded mb-4">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+
     <div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
         <div class="bg-white p-8 rounded shadow-md text-center max-w-md w-full">
             <h1 class="text-2xl font-bold mb-4 text-gray-800">Redefinir Senha</h1>
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
+                <input type="hidden" name="email" value="{{ $email ?? old('email') }}"> <!-- ✅ Campo oculto -->
 
+                <!-- Apenas campos de senha visíveis -->
                 <div class="mb-4 text-left">
                     <label for="password" class="block text-gray-700 mb-2">Nova Senha</label>
                     <input type="password" id="password" name="password" required

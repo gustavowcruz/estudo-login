@@ -71,12 +71,13 @@ Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
 
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+// ✅ Corrigido: GET para exibir o formulário
+Route::get('/reset-password/{token}', [AuthController::class, 'redefinirSenha'])
+    ->middleware('guest')->name('password.reset');
+
+// ✅ POST para processar o formulário
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+->middleware('guest')->name('password.update');
 
 Route::post('/forgot-password',[AuthController::class, 'forgotPassword'])
 ->middleware('guest')->name('password.email');
-
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])
-->middleware('guest')->name('password.update');
