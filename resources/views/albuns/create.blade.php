@@ -1,6 +1,5 @@
 <x-layout.albuns>
     <div class=" ">
-
         <h1 class="text-2xl font-bold mb-4">Criar Álbum</h1>
         <form action="{{ route('albuns.store') }}" method="POST" class="bg-white p-6 rounded shadow-md">
             @csrf
